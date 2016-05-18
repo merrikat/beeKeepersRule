@@ -2,7 +2,15 @@
 <html>
 	<head>
 		<title>The Beekeeper's rule</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script>
+		$(document).ready(function() {
+		var now = new Date();
+		var day = ("0" + now.getDate()).slice(-2);
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+		$('#selectDate').val(today);
+		});
 		function getFormattedDate(date) {
 		var year = date.getFullYear();
 		var month = (1 + date.getMonth()).toString();
@@ -17,9 +25,18 @@
 		return getFormattedDate(result);
 		}
 		function myFunction() {
+		document.getElementById("eggHatchOutput").innerHTML = "";
+		document.getElementById("cellCappedOutput").innerHTML = "";
+		document.getElementById("beeEmergeOutput").innerHTML = "";
+		document.getElementById("matedOutput").innerHTML = "";
+		document.getElementById("layingOutput").innerHTML = "";
+		document.getElementById("foragingOutput").innerHTML = "";
+		document.getElementById("visitDCAOutput").innerHTML = "";
 		var startDate = document.getElementById("selectDate").value;
 		var e = document.getElementById("selectBeeType");
 		var beeType = e.options[e.selectedIndex].value;
+		var f = document.getElementById("selectObservation");
+		var observationType = f.options[f.selectedIndex].value;
 		if (beeType == "Worker"){
 			var eggHatchDate = addDays(startDate,3);
 			var cellCappedDate = addDays(startDate,8);
@@ -45,11 +62,15 @@
 			var visitDCADateLow = addDays(startDate,38-5);
 			var visitDCADateHigh = addDays(startDate,38+5);
 		}
+		if (observationType == "EggSeen"){
 		if (typeof eggHatchDate !== 'undefined') {
 		document.getElementById("eggHatchOutput").innerHTML = "Egg hatched on "+eggHatchDate;
 		}
+		}
+		if (observationType == "EggSeen" || observationType == "LarvaSeen"){
 		if (typeof cellCappedDate !== 'undefined') {
 		document.getElementById("cellCappedOutput").innerHTML = "Cell capped on "+cellCappedDate;
+		}
 		}
 		if (typeof beeEmergeDate !== 'undefined') {
 		document.getElementById("beeEmergeOutput").innerHTML = "Bee emerged on "+beeEmergeDate;
@@ -59,14 +80,15 @@
 		}
 		if (typeof layingDate !== 'undefined') {
 		document.getElementById("layingOutput").innerHTML = "Laying on "+layingDate +" ("+layingDateLow+" to "+layingDateHigh+")";
-		}	
+			}
 		if (typeof foragingDate !== 'undefined') {
 		document.getElementById("foragingOutput").innerHTML = "Foraging on "+foragingDate +" ("+foragingDateLow+" to "+foragingDateHigh+")";
 		}
 		if (typeof visitDCADate !== 'undefined') {
-		document.getElementById("visitDCAOutput").innerHTML = "Visiting DCA on "+visitDCADate +"("+visitDCADateLow+" to "+visitDCADateHigh+")";
-		}					
-		}
+		document.getElementById("visitDCAOutput").innerHTML = "Visiting DCA on "+visitDCADate +" ("+visitDCADateLow+" to "+visitDCADateHigh+")";
+							}
+						}
+		
 		</script>
 		
 	</head>
@@ -79,15 +101,20 @@
 			<option value="Queen">Queen</option>
 			<option value="Drone">Drone</option>
 		</select>
-		<button onclick="myFunction()">Calculate dates</button>
-		<p id="eggHatchOutput"></p>
-		<p id="cellCappedOutput"></p>
-		<p id="beeEmergeOutput"></p>
-		<p id="matedOutput"></p>
-		<p id="layingOutput"></p>
-		<p id="foragingOutput"></p>
-		<p id="visitDCAOutput"></p>
-		<table>
-		</table>
+		<select id="selectObservation">
+			<option value="EggSeen">Egg seen</option>
+			<option value="LarvaSeen">Larva seen</option>
+			<option value="CappedCellSeen">Capped cell seen</option>
+		</select>
+		<button onclick="myFunction()" id="myButton">Calculate dates</button>
+		<div>
+			<p id="eggHatchOutput"></p>
+			<p id="cellCappedOutput"></p>
+			<p id="beeEmergeOutput"></p>
+			<p id="matedOutput"></p>
+			<p id="layingOutput"></p>
+			<p id="foragingOutput"></p>
+			<p id="visitDCAOutput"></p>
+		</div>
 	</body>
 </html>
