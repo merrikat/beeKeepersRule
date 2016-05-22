@@ -4,11 +4,15 @@
 		<title>The Beekeeper's rule</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script>
+
+		//Convert today's date into useful format
 		$(document).ready(function() {
 		var now = new Date();
 		var day = ("0" + now.getDate()).slice(-2);
 		var month = ("0" + (now.getMonth() + 1)).slice(-2);
 		var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+		//Function for datepicker
 		$('#selectDate').val(today);
 		});
 		function getFormattedDate(date) {
@@ -19,12 +23,18 @@
 		day = day.length > 1 ? day : '0' + day;
 		return day + '/' + month + '/' + year;
 		}
+
+		//Function to add days to a date
 		function addDays(date, days) {
 		var result = new Date(date);
 		result.setDate(result.getDate() + days);
 		return getFormattedDate(result);
 		}
+
+		//Main function
 		function myFunction() {
+
+			//Set all text elements to blank
 		document.getElementById("eggHatchOutput").innerHTML = "";
 		document.getElementById("cellCappedOutput").innerHTML = "";
 		document.getElementById("beeEmergeOutput").innerHTML = "";
@@ -32,46 +42,82 @@
 		document.getElementById("layingOutput").innerHTML = "";
 		document.getElementById("foragingOutput").innerHTML = "";
 		document.getElementById("visitDCAOutput").innerHTML = "";
+
+		//Get date from datepicker
 		var startDate = document.getElementById("selectDate").value;
 		var e = document.getElementById("selectBeeType");
+
+		//assign user selected bee type to variable
 		var beeType = e.options[e.selectedIndex].value;
 		var f = document.getElementById("selectObservation");
+
+		//and for observation type
 		var observationType = f.options[f.selectedIndex].value;
 		if (beeType == "Worker"){
-			var eggHatchDate = addDays(startDate,3);
-			var cellCappedDate = addDays(startDate,8);
-			var beeEmergeDate = addDays(startDate,21);
-			var foragingDate = addDays(startDate,42);
-			var foragingDateLow = addDays(startDate,42-7);
-			var foragingDateHigh = addDays(startDate,42+7);
+			var offset = 0;
+			if (observationType == "EggSeen"){
+				offset = 0;
+			}
+			else if (observationType == "LarvaSeen"){
+				offset = -3;
+			}
+			else if (observationType == "CappedCellSeen"){
+				offset = -8;
+			}
+			var eggHatchDate = addDays(startDate,3+offset);
+			var cellCappedDate = addDays(startDate,8+offset);
+			var beeEmergeDate = addDays(startDate,21+offset);
+			var foragingDate = addDays(startDate,42+offset);
+			var foragingDateLow = addDays(startDate,42-7+offset);
+			var foragingDateHigh = addDays(startDate,42+7+offset);
 		}
 		else if (beeType == "Queen"){
-			var eggHatchDate = addDays(startDate,3);
-			var cellCappedDate = addDays(startDate,8);
-			var beeEmergeDate = addDays(startDate,16);
-			var matedDate = addDays(startDate,22);
-			var layingDate = addDays(startDate,28);
-			var layingDateLow = addDays(startDate,28-5);
-			var layingDateHigh = addDays(startDate,28+5);
+			var offset = 0;
+			if (observationType == "EggSeen"){
+				offset = 0;
+			}
+			else if (observationType == "LarvaSeen"){
+				offset = -3;
+			}
+			else if (observationType == "CappedCellSeen"){
+				offset = -8;
+			}
+			var eggHatchDate = addDays(startDate,3+offset);
+			var cellCappedDate = addDays(startDate,8+offset);
+			var beeEmergeDate = addDays(startDate,16+offset);
+			var matedDate = addDays(startDate,22+offset);
+			var layingDate = addDays(startDate,28+offset);
+			var layingDateLow = addDays(startDate,28-5+offset);
+			var layingDateHigh = addDays(startDate,28+5+offset);
 		}
 		else if (beeType == "Drone"){
-			var eggHatchDate = addDays(startDate,3);
-			var cellCappedDate = addDays(startDate,10);
-			var beeEmergeDate = addDays(startDate,24);
-			var visitDCADate = addDays(startDate,38);
-			var visitDCADateLow = addDays(startDate,38-5);
-			var visitDCADateHigh = addDays(startDate,38+5);
+			var offset = 0;
+			if (observationType == "EggSeen"){
+				offset = 0;
+			}
+			else if (observationType == "LarvaSeen"){
+				offset = -3;
+			}
+			else if (observationType == "CappedCellSeen"){
+				offset = -10;
+			}
+			var eggHatchDate = addDays(startDate,3+offset);
+			var cellCappedDate = addDays(startDate,10+offset);
+			var beeEmergeDate = addDays(startDate,24+offset);
+			var visitDCADate = addDays(startDate,38+offset);
+			var visitDCADateLow = addDays(startDate,38-5+offset);
+			var visitDCADateHigh = addDays(startDate,38+5+offset);
 		}
-		if (observationType == "EggSeen"){
+//		if (observationType == "EggSeen"){
 		if (typeof eggHatchDate !== 'undefined') {
 		document.getElementById("eggHatchOutput").innerHTML = "Egg hatched on "+eggHatchDate;
 		}
-		}
-		if (observationType == "EggSeen" || observationType == "LarvaSeen"){
+//		}
+//		if (observationType == "EggSeen" || observationType == "LarvaSeen"){
 		if (typeof cellCappedDate !== 'undefined') {
 		document.getElementById("cellCappedOutput").innerHTML = "Cell capped on "+cellCappedDate;
 		}
-		}
+//		}
 		if (typeof beeEmergeDate !== 'undefined') {
 		document.getElementById("beeEmergeOutput").innerHTML = "Bee emerged on "+beeEmergeDate;
 		}
