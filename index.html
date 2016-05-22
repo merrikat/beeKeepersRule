@@ -2,11 +2,28 @@
 <html>
 	<head>
 		<title>The Beekeeper's rule</title>
+  		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.2/fullcalendar.min.css">
+  		<line rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/3.0.3/basic/jquery.qtip.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.js"></script> 
+		<script src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
+		<style>
+		.calendar{
+			width : 50%;
+			height: 50%;
+}
+</style>
 		<script>
 
 		//Convert today's date into useful format
 		$(document).ready(function() {
+
+		$('#calendar').fullCalendar({
+//			height: 500
+allDayDefault : true
+		     });
+
 		var now = new Date();
 		var day = ("0" + now.getDate()).slice(-2);
 		var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -31,6 +48,20 @@
 		return getFormattedDate(result);
 		}
 
+		function stringToDate(_date,_format,_delimiter)
+		{
+		            var formatLowerCase=_format.toLowerCase();
+		            var formatItems=formatLowerCase.split(_delimiter);
+		            var dateItems=_date.split(_delimiter);
+		            var monthIndex=formatItems.indexOf("mm");
+		            var dayIndex=formatItems.indexOf("dd");
+		            var yearIndex=formatItems.indexOf("yyyy");
+		            var month=parseInt(dateItems[monthIndex]);
+		            month-=1;
+		            var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+		            return formatedDate;
+		}
+
 		//Main function
 		function myFunction() {
 
@@ -46,6 +77,13 @@
 		//Get date from datepicker
 		var startDate = document.getElementById("selectDate").value;
 		var e = document.getElementById("selectBeeType");
+
+		$('#calendar').fullCalendar('renderEvent',{
+			title : 'Start Date',
+			start: startDate,
+			color : 'red'
+		}, true);
+
 
 		//assign user selected bee type to variable
 		var beeType = e.options[e.selectedIndex].value;
@@ -111,27 +149,76 @@
 //		if (observationType == "EggSeen"){
 		if (typeof eggHatchDate !== 'undefined') {
 		document.getElementById("eggHatchOutput").innerHTML = "Egg hatched on "+eggHatchDate;
+
+		$('#calendar').fullCalendar('renderEvent',{
+			title : 'Egg hatch',
+			start: stringToDate(eggHatchDate, "dd/MM/YYYY","/"),
+			color : 'green',
+		}, true);
+
 		}
 //		}
 //		if (observationType == "EggSeen" || observationType == "LarvaSeen"){
 		if (typeof cellCappedDate !== 'undefined') {
 		document.getElementById("cellCappedOutput").innerHTML = "Cell capped on "+cellCappedDate;
+
+		$('#calendar').fullCalendar('renderEvent',{
+			title : 'Cell capped',
+			start: cellCappedDate,
+			color : ' #004de6'
+		}, true);
+
 		}
 //		}
 		if (typeof beeEmergeDate !== 'undefined') {
 		document.getElementById("beeEmergeOutput").innerHTML = "Bee emerged on "+beeEmergeDate;
+
+		$('#calendar').fullCalendar('renderEvent',{
+			title : 'Bee emerge',
+			start: beeEmergeDate,
+			color : ' #80aaff'
+		}, true);
+
 		}
 		if (typeof matedDate !== 'undefined') {
 		document.getElementById("matedOutput").innerHTML = "Mated on "+matedDate;
+
+		$('#calendar').fullCalendar('renderEvent',{
+			title : 'Mated',
+			start: matedDate,
+			color : '#ff9933'
+		}, true);
+
 		}
 		if (typeof layingDate !== 'undefined') {
 		document.getElementById("layingOutput").innerHTML = "Laying on "+layingDate +" ("+layingDateLow+" to "+layingDateHigh+")";
+
+		var event={title: 'Laying start', start:  new Date(layingDateLow)};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+
+		var event={title: 'Laying end', start:  new Date(layingDateHigh)};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+
 			}
 		if (typeof foragingDate !== 'undefined') {
 		document.getElementById("foragingOutput").innerHTML = "Foraging on "+foragingDate +" ("+foragingDateLow+" to "+foragingDateHigh+")";
+
+		var event={title: 'Foraging start', start:  new Date(foragingDateLow)};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+
+		var event={title: 'Foraging end', start:  new Date(foragingDateHigh)};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+
 		}
 		if (typeof visitDCADate !== 'undefined') {
 		document.getElementById("visitDCAOutput").innerHTML = "Visiting DCA on "+visitDCADate +" ("+visitDCADateLow+" to "+visitDCADateHigh+")";
+
+		var event={title: 'Visiting DCA start', start:  new Date(visitDCADateLow)};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+
+		var event={title: 'Visiting DCA end', start:  new Date(visitDCADateHigh)};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+
 							}
 						}
 		
@@ -153,6 +240,8 @@
 			<option value="CappedCellSeen">Capped cell seen</option>
 		</select>
 		<button onclick="myFunction()" id="myButton">Calculate dates</button>
+
+		<div class="calendar" id="calendar"></div>
 		<div>
 			<p id="eggHatchOutput"></p>
 			<p id="cellCappedOutput"></p>
