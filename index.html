@@ -8,10 +8,23 @@
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 			<script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.js"></script>
 			<script src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
+			<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0-rc.2/themes/smoothness/jquery-ui.css">
 			<style>
 			.calendar{
 				width : 50%;
 				height: 50%;
+			}
+			h1 {
+				font-family: 'Lobster', Georgia, Times, serif;
+				font-size: 60px;
+			}
+
+			p {
+				font-family: 'Cabin', Helvetica, Arial, sans-serif;
+				font-size: 15px;
+			}
 			}
 			</style>
 			<script>
@@ -19,7 +32,8 @@
 			$(document).ready(function() {
 			$('#calendar').fullCalendar({
 				//			height: 500
-			allDayDefault : true
+			allDayDefault : true,
+			theme: true,
 			});
 			var now = new Date();
 			var day = ("0" + now.getDate()).slice(-2);
@@ -203,7 +217,6 @@
 		</head>
 		<body>
 			<h1>The Beekeeper's Rule</h1>
-			<p>Select a start date and bee type</p>
 			<input type="date" id="selectDate" value="2014-02-09">
 			<select id="selectBeeType">
 				<option value="Worker">Worker</option>
@@ -216,6 +229,7 @@
 				<option value="CappedCellSeen">Capped cell seen</option>
 			</select>
 			<button onclick="myFunction()" id="myButton">Calculate dates</button>
+			<p></p>
 			<div class="calendar" id="calendar"></div>
 			<div>
 				<p id="eggHatchOutput"></p>
